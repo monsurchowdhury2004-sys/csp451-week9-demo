@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentiment Analysis Demo</title>
+</head>
+<body>
+    <h2>Azure Sentiment Analysis Demo</h2>
+
+    <textarea id="text" rows="5" cols="50" placeholder="Enter text here..."></textarea>
+    <br><br>
+    <button onclick="analyzeSentiment()">Analyze</button>
+
+    <h3>Result:</h3>
+    <p id="result"></p>
+
+<script>
+async function analyzeSentiment() {
+
+    const text = document.getElementById("text").value;
+
+    const response = await fetch("https://ai-week9-demo.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Ocp-Apim-Subscription-Key": "8CiUCPGib6wRPN7cb6P55S1c7nkM0RcaPTHede02AfK6xiJdPMcYJQQJ99CBACBsN54XJ3w3AAAEACOGXJ5s"
+        },
+        body: JSON.stringify({
+            kind: "SentimentAnalysis",
+            analysisInput: {
+                documents: [
+                    {
+                        id: "1",
+                        language: "en",
+                        text: text
+                    }
+                ]
+            }
+        })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("result").innerText =
+        "Sentiment: " + data.results.documents[0].sentiment;
+}
+</script>
+
+</body>
+</html>
